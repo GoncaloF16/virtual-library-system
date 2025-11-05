@@ -1,47 +1,81 @@
 extends layout/fe_master
 
 block content
-  .d-flex.justify-content-between.align-items-center
-    h2.mb-4.text-primary Lista de Empréstimos
+  .d-flex.justify-content-between.align-items-center.mb-4
+    h2.mb-0.text-primary
+      i.bi.bi-journal-check.me-2
+      | Lista de Empréstimos
 
     .text-end
       a.btn.btn-primary.btn-lg(
         data-bs-toggle="modal",
         data-bs-target="#modalNovoEmprestimo"
-      ) + Novo Empréstimo
+      ) 
+        i.bi.bi-plus-circle.me-2
+        | Novo Empréstimo
 
   if emprestimos.length
-    br
-    table.table.table-striped.table-hover.mt-3
-      thead.table-dark
-        tr
-          th Leitor
-          th Livro
-          th Data Empréstimo
-          th Data Devolução
-          th.text-end Ações
-      tbody
-        each emprestimo in emprestimos
+    .table-responsive
+      table.table.table-hover.mt-3
+        thead.table-dark
           tr
-            td= emprestimo.leitor_nome
-            td= emprestimo.livro_titulo
-            td= new Date(emprestimo.data_emprestimo).toLocaleDateString('pt-PT')
-            td= emprestimo.data_devolucao ? new Date(emprestimo.data_devolucao).toLocaleDateString('pt-PT') : ''
-            td.text-end
-              a.btn.btn-warning.btn-sm.me-2(
-                href="#",
-                data-bs-toggle="modal",
-                data-bs-target="#modalNovoEmprestimo",
-                data-id=emprestimo.id,
-                data-id_leitor=emprestimo.leitor_id,
-                data-id_livro=emprestimo.livro_id,
-                data-data_devolucao=emprestimo.data_devolucao
-              ) Editar
-              button.btn.btn-danger.btn-sm(
-                type="button",
-                onclick=`apagarEmprestimo('${emprestimo.id}')`
-              ) Excluir
-
+            th
+              i.bi.bi-person-fill.me-2
+              | Leitor
+            th
+              i.bi.bi-book-fill.me-2
+              | Livro
+            th
+              i.bi.bi-calendar-event.me-2
+              | Data Empréstimo
+            th
+              i.bi.bi-calendar-check.me-2
+              | Data Devolução
+            th.text-end
+              i.bi.bi-gear-fill.me-2
+              | Ações
+        tbody
+          each emprestimo in emprestimos
+            tr
+              td
+                i.bi.bi-person-circle.me-2.text-primary
+                strong= emprestimo.leitor.nome
+              td
+                i.bi.bi-book.me-2.text-info
+                = emprestimo.livro.titulo
+              td
+                i.bi.bi-calendar3.me-2
+                = new Date(emprestimo.dataEmprestimo).toLocaleDateString('pt-PT')
+              td
+                if emprestimo.dataDevolucao
+                  span.badge.bg-success(style="font-size: 0.85rem; padding: 0.5rem 0.75rem;")
+                    i.bi.bi-check-circle.me-1
+                    = new Date(emprestimo.dataDevolucao).toLocaleDateString('pt-PT')
+                else
+                  span.badge.bg-warning.text-dark(style="font-size: 0.85rem; padding: 0.5rem 0.75rem;")
+                    i.bi.bi-clock.me-1
+                    | Pendente
+              td.text-end
+                a.btn.btn-warning.btn-sm.me-2(
+                  href="#",
+                  data-bs-toggle="modal",
+                  data-bs-target="#modalNovoEmprestimo",
+                  data-id=emprestimo._id,
+                  data-id_leitor=emprestimo.leitor._id,
+                  data-id_livro=emprestimo.livro._id,
+                  data-data_emprestimo=emprestimo.dataEmprestimo,
+                  data-data_devolucao=emprestimo.dataDevolucao
+                ) 
+                  i.bi.bi-pencil-fill.me-1
+                  | Editar
+                button.btn.btn-danger.btn-sm(
+                  type="button",
+                  onclick=`apagarEmprestimo('${emprestimo._id}')`
+                ) 
+                  i.bi.bi-trash-fill.me-1
+                  | Excluir
   else
-    .text-center.mt-5
-      p.text-muted Nenhum empréstimo cadastrado ainda.
+    .text-center.mt-5.p-5(style="background: rgba(255,255,255,0.7); border-radius: 12px;")
+      i.bi.bi-journal-x.text-muted(style="font-size: 4rem;")
+      p.text-muted.mt-3.mb-0(style="font-size: 1.1rem;") Nenhum empréstimo cadastrado ainda.
+      p.text-muted.small Clique em "Novo Empréstimo" para registrar o primeiro empréstimo.

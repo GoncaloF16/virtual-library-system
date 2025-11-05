@@ -1,9 +1,9 @@
-const Livro = require('../database/models/livro');
+const Livro = require('../models/livro');
 
 module.exports = {
   async getAll(req, res) {
     try {
-      const livros = await Livro.all();
+      const livros = await Livro.find();
       res.json(livros);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -23,7 +23,8 @@ module.exports = {
   async create(req, res) {
     try {
       const { titulo, autor, genero } = req.body;
-      const novoLivro = await Livro.create({ titulo, autor, genero });
+      const novoLivro = new Livro({ titulo, autor, genero });
+      await novoLivro.save();
       res.status(201).json(novoLivro);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -33,7 +34,7 @@ module.exports = {
   async update(req, res) {
     try {
       const { titulo, autor, genero } = req.body;
-      await Livro.update(req.params.id, { titulo, autor, genero });
+      await Livro.findByIdAndUpdate(req.params.id, { titulo, autor, genero });
       res.json({ message: 'Livro atualizado com sucesso' });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -42,10 +43,10 @@ module.exports = {
 
   async delete(req, res) {
     try {
-      await Livro.delete(req.params.id);
+      await Livro.findByIdAndDelete(req.params.id);
       res.json({ message: 'Livro apagado com sucesso' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  },
+  }
 };

@@ -1,9 +1,9 @@
-const Leitor = require('../database/models/leitor');
+const Leitor = require('../models/leitor');
 
 module.exports = {
   async getAll(req, res) {
     try {
-      const leitores = await Leitor.all();
+      const leitores = await Leitor.find();
       res.json(leitores);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -23,7 +23,8 @@ module.exports = {
   async create(req, res) {
     try {
       const { nome, email } = req.body;
-      const novoLeitor = await Leitor.create({ nome, email });
+      const novoLeitor = new Leitor({ nome, email });
+      await novoLeitor.save();
       res.status(201).json(novoLeitor);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -33,7 +34,7 @@ module.exports = {
   async update(req, res) {
     try {
       const { nome, email } = req.body;
-      await Leitor.update(req.params.id, { nome, email });
+      await Leitor.findByIdAndUpdate(req.params.id, { nome, email });
       res.json({ message: 'Leitor atualizado com sucesso' });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -42,10 +43,10 @@ module.exports = {
 
   async delete(req, res) {
     try {
-      await Leitor.delete(req.params.id);
+      await Leitor.findByIdAndDelete(req.params.id);
       res.json({ message: 'Leitor apagado com sucesso' });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  },
+  }
 };

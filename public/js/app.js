@@ -1,5 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // --- FORMULÁRIO DE LIVROS ---
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll('aside .nav-link');
+  
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    const href = link.getAttribute('href');
+    
+    if (href === currentPath || 
+        (currentPath === '/' && href === '/') ||
+        (currentPath.startsWith('/leitores') && href === '/leitores') ||
+        (currentPath.startsWith('/emprestimos') && href === '/emprestimos')) {
+      link.classList.add('active');
+    }
+  });
+
   const formLivro = document.getElementById('formNovoLivro');
   const modalLivro = document.getElementById('modalNovoLivro');
 
@@ -66,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- FORMULÁRIO DE LEITORES ---
   const formLeitor = document.getElementById('formNovoLeitor');
   const modalLeitor = document.getElementById('modalNovoLeitor');
 
@@ -130,36 +143,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- FORMULÁRIO DE EMPRÉSTIMOS ---
   const formEmprestimo = document.getElementById('formNovoEmprestimo');
   const modalEmprestimo = document.getElementById('modalNovoEmprestimo');
 
   if (modalEmprestimo) {
-    modalEmprestimo.addEventListener('show.bs.modal', function (event) {
-      const button = event.relatedTarget;
-      const id = button.getAttribute('data-id');
-      const id_leitor = button.getAttribute('data-id_leitor');
-      const id_livro = button.getAttribute('data-id_livro');
-      const data_emprestimo = button.getAttribute('data-data_emprestimo');
-      const data_devolucao = button.getAttribute('data-data_devolucao');
+  modalEmprestimo.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-id');
+    const id_leitor = button.getAttribute('data-id_leitor');
+    const id_livro = button.getAttribute('data-id_livro');
+    const data_emprestimo = button.getAttribute('data-data_emprestimo');
+    const data_devolucao = button.getAttribute('data-data_devolucao');
 
-      if (formEmprestimo) {
-        formEmprestimo.dataset.emprestimoId = id || '';
-        formEmprestimo.leitor_id.value = id_leitor || '';
-        formEmprestimo.livro_id.value = id_livro || '';
+    if (formEmprestimo) {
+      formEmprestimo.dataset.emprestimoId = id || '';
+      formEmprestimo.leitor_id.value = id_leitor || '';
+      formEmprestimo.livro_id.value = id_livro || '';
 
-        const inputDataEmprestimo = formEmprestimo.querySelector('[name="data_emprestimo"]');
-        if (inputDataEmprestimo) {
-          inputDataEmprestimo.value = data_emprestimo ? new Date(data_emprestimo).toISOString().slice(0, 10) : '';
-        }
-
-        const inputDataDevolucao = formEmprestimo.querySelector('[name="data_devolucao"]');
-        if (inputDataDevolucao) {
-          inputDataDevolucao.value = data_devolucao ? new Date(data_devolucao).toISOString().slice(0, 10) : '';
-        }
+      const inputDataEmprestimo = formEmprestimo.querySelector('[name="data_emprestimo"]');
+      if (inputDataEmprestimo) {
+        inputDataEmprestimo.value = data_emprestimo ? new Date(data_emprestimo).toISOString().slice(0, 10) : '';
       }
-    });
-  }
+
+      const inputDataDevolucao = formEmprestimo.querySelector('[name="data_devolucao"]');
+      if (inputDataDevolucao) {
+        inputDataDevolucao.value = data_devolucao ? new Date(data_devolucao).toISOString().slice(0, 10) : '';
+      }
+    }
+  });
+}
 
   if (formEmprestimo) {
     formEmprestimo.addEventListener('submit', async (e) => {
@@ -221,7 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Função para apagar livro
   window.apagarLivro = async function(id) {
     if (confirm("Tens a certeza que queres apagar este livro?")) {
       try {
@@ -244,7 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Função para apagar leitor
   window.apagarLeitor = async function(id) {
     if (confirm("Tens a certeza que queres apagar este leitor?")) {
       try {
@@ -267,7 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Função para apagar empréstimo
   window.apagarEmprestimo = async function(id) {
     if (confirm("Tens a certeza que queres apagar este empréstimo?")) {
       try {
