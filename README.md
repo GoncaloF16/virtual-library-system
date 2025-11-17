@@ -210,13 +210,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Gonçalo Ferreira**
 - GitHub: [@GoncaloF16](https://github.com/GoncaloF16)
 
-## 🙏 Acknowledgments
-
-- Bootstrap team for the amazing CSS framework
-- MongoDB team for the robust database solution
-- Express.js community for the excellent documentation
-- All contributors who help improve this project
-
 ## 📧 Contact
 
 For questions or support, please open an issue on GitHub or contact the maintainer.
